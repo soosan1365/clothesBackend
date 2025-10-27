@@ -1,73 +1,88 @@
 
-
-// function for add product
-// ...existing code...
+import { v2 as cloudinary } from "cloudinary";
 import productModel from "../models/productModel.js";
 
-const addProduct = async (req, res) => {
+const addProduct = async (req,res) => {
   try {
-    const { name, description, price, category, subCategory, sizes, bestseller } = req.body;
+    const {
+      name,
+      description,
+      price,
+      category,
+      subCategory,
+      sizes,
+      bestseller,
+    } = req.body;
 
-    // جمع‌آوری امن فایل‌ها (upload.fields => req.files is an object of arrays)
-    const images = [];
-    if (req.files && typeof req.files === "object") {
-      Object.values(req.files).forEach((arr) => {
-        if (Array.isArray(arr)) {
-          arr.forEach((f) => {
-            if (f && f.filename) images.push(`/uploads/${f.filename}`);
-          });
-        }
-      });
-    }
-    let sizesArr = [];
-    if (Array.isArray(sizes)) sizesArr = sizes;
-    else if (typeof sizes === "string" && sizes.trim()) {
-      try {
-        sizesArr = JSON.parse(sizes);
-      } catch {
-        sizesArr = [sizes];
-      }
-    }
+    const image1 = req.files.image1 && req.files.image1[0];
+    const image2 = req.files.image2 && req.files.image2[0];
+    const image3 = req.files.image3 && req.files.image3[0];
+    const image4 = req.files.image4 && req.files.image4[0];
+    const images = [image1, image2, image3, image4].filter(
+      (item) => item !== undefined
+    );
 
-    // اعتبارسنجی ساده
-    if (!name || !description || !price || !category || !subCategory || !sizesArr.length) {
-      return res.status(400).json({
-        success: false,
-        message: "Missing required fields: name, description, price, category, subCategory, sizes",
-      });
-    }
-
-    // اگر می‌خواهید در DB ذخیره کنید (productModel موجود باشد)
-    const product = await productModel.create({
+    let imageUrl = await Promise.all(
+      images.map(async (item) => {
+        let result = await cloudinary.uploader.upload(item.path, {
+          resource_type: "image",
+        });
+        return result.secure_url;
+      })
+    );
+    
+    const productData = await productModel.create({
       name,
       description,
       price: Number(price),
-      image: images,
+      image:imageUrl,
       category,
       subCategory,
-      sizes: sizesArr,
-      bestseller: bestseller === "true" || bestseller === true,
+      sizes: JSON.parse(sizes),
+      bestseller: bestseller === "true" ? true : false,
       date: Date.now(),
     });
+    const product = new productModel(productData);
+    await product.save();
 
-    return res.status(201).json({ success: true, product });
+   res.json({ success: true, message: "Product Added" });
   } catch (error) {
     console.error("addProduct error:", error);
-    return res.status(500).json({ success: false, message: error?.message || "Server error" });
+    return res.json({ success: false, message: error?.message || "Server error" });
   }
 };
-// ...existing code...
+
 
 // function for list product
-const listProduct = async (req, res) => {
+const listProduct = async (req,res) => {
+  try {
+    const products =  await productModel.find({})
+    res.json({success:true, products})
+  } catch (error) {
+    console.error("listProduct error:", error);
+    return res.json({ success: false, message: error?.message || "Server error" });
+  }
+};
 
-}
 // function for removing product
-const removeProduct = async (req, res) => {
-
-}
+const removeProduct = async (req,res) => {
+  try {
+    await productModel.findByIdAndDelete(req.body.id)
+    res.json({success:true, message:"Product Removed"})
+  } catch (error) {
+      console.error( error);
+     res.json({ success: false, message: error?.message || "Server error" });
+  }
+};
 // function for single product info
 const singleProduct = async (req, res) => {
-
-}
-export { addProduct, listProduct, removeProduct, singleProduct };
+  try {
+     const {productId}=req.body
+     const product=await productModel.findById(productId)
+     res.json({success:true, product})
+  } catch (error) {
+     console.error( error);
+     res.json({ success: false, message: error?.message || "Server error" });
+  }
+};
+export { addProduct,listProduct,removeProduct,singleProduct };
