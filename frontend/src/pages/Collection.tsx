@@ -88,7 +88,7 @@ function Collection(): React.ReactElement | null {
   // از متغییر های کتگوری یا ساب کتگوری یا سرچ یا شو سرچ  اپدیت شد
   useEffect(() => {
     applyfilter();
-  }, [category, subCategory, search, showSearch]);
+  }, [category, subCategory, search, showSearch,products]);
   // فانکشن سورت پروداکت وقتی اجرا بشه که سورت تایپ  که اون پایین بوسیله
   // ست سورت تایپ تغییر میکنه و مقدار ولیو ان تگ اپشن را میگیره واپدیت بشه
   useEffect(() => {

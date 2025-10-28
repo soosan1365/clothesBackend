@@ -1,8 +1,11 @@
 import { createContext, useEffect, useState } from "react";
-import { products } from "../assets";
+// import { products } from "../assets";
 import type { ShopContextType, productType, CartItemsType } from "../type";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+export const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 
 //createContext
 export const ShopContext = createContext<ShopContextType | undefined>(undefined);
@@ -14,6 +17,10 @@ const ShopContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =>
   const [search, setSearch] = useState<string>("");
   //define useState for show tag search
   const [showSearch, setShowSearch] = useState<boolean>(true);
+
+  // save product with fetch
+  const [products, setProducts] = useState<productType[]>([]);
+
   const [cartItems, setCartItems] = useState<CartItemsType>(() => {
     try {
       const stored = localStorage.getItem("cartItems");
@@ -89,6 +96,26 @@ const ShopContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =>
 
     return totalAmount;
   };
+
+const getProductsData = async () => {
+try {
+  const response = await axios.get(backendURL + "/api/product/list");
+if (response.data.success) {
+  setProducts(response.data.products);
+  
+} else {
+  toast.error(response.data.message);
+}
+
+} catch (error:string | any) {
+  toast.error(error.message);
+}
+}
+
+useEffect(() => {
+  getProductsData();
+}, []);
+
   const value = {
     products,
     currency,
@@ -103,6 +130,7 @@ const ShopContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =>
     updateQuantity,
     getCartAmount,
     navigate,
+    backendURL
   };
 useEffect(() => {
   try {
