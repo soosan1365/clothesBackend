@@ -31,7 +31,6 @@ const loginUser = async (req, res) => {
 };
 // Route for user registration
 const registerUser = async (req, res) => {
-  
   try {
     const { name, email, password } = req.body;
     // Check if user already exists
@@ -72,15 +71,19 @@ const registerUser = async (req, res) => {
 // route for admin login
 const adminLogin = async (req, res) => {
   try {
-     const {email,password}=req.body
-     if (email === process.env.ADMIN_EMAIL && password===process.env.ADMIN_PASSWORD){
-       const token = jwt.sign(email+password, process.env.JWT_SECRET);
-        res.json({ success: true, token });
-     }else{
+    const { email, password } = req.body;
+    if (
+      email === process.env.ADMIN_EMAIL &&
+      password === process.env.ADMIN_PASSWORD
+    ) {
+      const token = jwt.sign(email + password, process.env.JWT_SECRET);
+      res.json({ success: true,token});
+    } else {
       res.json({ success: false, message: "Invalid admin credentials" });
-     }
+    }
   } catch (error) {
-    
+    console.log(error);
+    res.json({ success: false, message: "Server Error" });
   }
 };
 

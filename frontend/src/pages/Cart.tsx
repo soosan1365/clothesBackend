@@ -14,7 +14,8 @@ const Cart: React.FC = () => {
   const [cartData, setCartData] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    const tempData: CartItem[] = [];
+    if (products.length >0) {
+       const tempData: CartItem[] = [];
     for (const items in cartItems) {
       for (const item in cartItems[items]) {
         if (cartItems[items][item] > 0) {
@@ -27,7 +28,9 @@ const Cart: React.FC = () => {
       }
     }
     setCartData(tempData);
-  }, [cartItems]);
+    }
+   
+  }, [cartItems,products]);
 
   return (
     <div className=" mt-20 pt-14">

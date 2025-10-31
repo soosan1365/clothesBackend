@@ -6,14 +6,33 @@ export interface productType {
   name: string;
   description: string;
   price: number;
-  // images are imported assets (bundler provides string paths or modules)
   image: string[];
   category: string;
   subCategory: string;
   sizes: string[];
-  date: number;
   bestseller: boolean;
+  size:string;
+  quantity:number;
+  date?: string;
 }
+export type OrderItem = productType & {
+  quantity?: number;
+  size?: string | string[];
+  payment?: string | { method?: string; status?: string };
+  paymentMethod?: string;
+  status?: string;
+  date?: string;
+};
+
+export type Order = {
+  _id: string;
+  items: OrderItem[];
+  status?: string;
+  payment?: string | { method?: string; status?: string };
+  paymentMethod?: string;
+  date?: string;
+  amount?: number;
+};
 
 export type CartItemsType = Record<string, Record<string, number>>;
 
@@ -31,4 +50,8 @@ export interface ShopContextType {
   updateQuantity: (itemId: string, size: string, quantity: number) => Promise<void> | void;
   getCartAmount: () => number;
   navigate: NavigateFunction;
+  token: string;
+  setToken: Dispatch<SetStateAction<string>>;
+  backendURL: string;
+  setCartItems: Dispatch<SetStateAction<CartItemsType>>;
 }

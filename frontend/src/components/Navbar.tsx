@@ -25,10 +25,14 @@ const Navbar: React.FC = () => {
   }, []);
 
 
-
-  const shop = useContext(ShopContext) as ShopContextType | undefined;
-  if (!shop) return null;
-  const { getCartCount } = shop;
+  const { getCartCount,navigate,token,setToken,setCartItems } =useContext(ShopContext) as any
+  const logout =()=>{
+    localStorage.removeItem("token");
+    setToken("");
+   if (typeof setCartItems === "function") 
+     setCartItems({});
+    navigate("/login");
+  }
 
   return (
     <div
@@ -64,21 +68,21 @@ const Navbar: React.FC = () => {
         </ul>
         <div className="flex item-center gap-6">
           <div className="group relative">
-            <Link to="/login">
-              <img
+            
+              <img onClick={()=>token ? null :navigate("/login")}
                 className="w-5 cursor-pointer"
                 src={assets.profile_icon}
                 alt=""
               />
-            </Link>
-
+            
+{token &&
             <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
               <div className=" flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-600 rounded">
                 <p className="cursor-pointer hover:text-blue-900">My Profile</p>
-                <p className="cursor-pointer hover:text-blue-900"> Orders</p>
-                <p className="cursor-pointer hover:text-blue-900">Logout</p>
+                <p onClick={() => navigate("/orders")} className="cursor-pointer hover:text-blue-900"> Orders</p>
+                <p onClick={logout} className="cursor-pointer hover:text-blue-900">Logout</p>
               </div>
-            </div>
+            </div>}
           </div>
           <Link to="/cart" className="relative ">
             <img

@@ -9,13 +9,11 @@ const adminAuth = (req,res,next) => {
    } 
     const token_decode=jwt.verify(token,process.env.JWT_SECRET);
     if (token_decode !== process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD) {
-        return res.json({ success: false, message: "Not Authorized Login Again" });
+        return res.json({ success: false, message: "Not Authorized Login Again ..." });
     } 
     next()
-    
-   
   } catch (error) {
-    return res.json({ success: false, message: "Invalid token" });
+    return res.json({ success: false, message:error.message });
   }
 };
 
