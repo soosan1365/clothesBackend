@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context";
-import type { Order, OrderItem, ShopContextType } from "../type";
+import type { OrderItem, ShopContextType } from "../type";
 import axios from "axios";
 
 const Orders: React.FC = () => {
@@ -22,8 +22,8 @@ const Orders: React.FC = () => {
       if (response.data.success) {
 
         let allOrdersitem: OrderItem[] = [];
-        response.data.orders.map((order: Order) => {
-          order.items.map((item :OrderItem) => {
+        response.data.orders.map((order:OrderItem) => {
+          order.items.map((item:any) => {
             item["status"] = order.status;
             item["payment"] = order.payment;
             item["paymentMethod"] = order.paymentMethod;

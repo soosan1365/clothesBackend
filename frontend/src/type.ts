@@ -16,23 +16,17 @@ export interface productType {
   date?: string;
 }
 export type OrderItem = productType & {
-  quantity?: number;
-  size?: string | string[];
-  payment?: string | { method?: string; status?: string };
-  paymentMethod?: string;
-  status?: string;
-  date?: string;
+   userId:string,
+    amount:number,
+    address:object,
+    status:string,
+    paymentMethod:string,
+    payment:boolean,
+    date:string,
+    items:[];
 };
 
-export type Order = {
-  _id: string;
-  items: OrderItem[];
-  status?: string;
-  payment?: string | { method?: string; status?: string };
-  paymentMethod?: string;
-  date?: string;
-  amount?: number;
-};
+
 
 export type CartItemsType = Record<string, Record<string, number>>;
 
