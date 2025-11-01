@@ -114,60 +114,7 @@ const Orders: React.FC = () => {
           ))
         )}
       </div>
-      {/* <div className="flex flex-col w-full justify-center gap-6 ">
-        {orderData.map((item: any) => (
-          <div
-            key={item._id}
-            className=" grid grid-cols-1 sm:grid-cols-[0.5fr_2fr_1fr] 
-            lg:grid-cols-[0.5fr_2fr_1fr] py-4  order text-gray-700   md:items-center md:justify-between gap-12"
-          >
-            <div className="flex items-start gap-6 text-sm">
-              <img className=" image w-25" src={item.image?.[0]} alt="" />
-              <div>
-                <div className="flex gap-2  md:gap-8">
-                  <p className="sm:text-base collection  font-medium">
-                    {item.name}
-                  </p>
-                </div>
-                
-                  <div className="flex  justify-center items-center gap-5">
-                
-                    <p className="text-lg">
-                      {currency}
-                      {item.price}
-                    </p>
-                    <p>Quantity:{item.quantity}</p>
-                  
-                      <p className=" min-w-2 h-2  mt-2 rounded-full bg-teal-800"></p>
-                      <p className="text-sm md:text-base   ">{item.status}</p>
-                   
-                  
-                 
-                    <p>size:{item.size}</p>
-                    <p className="">
-                      Date:
-                      <span className="text-gray-400">
-                        {new Date(item.date).toDateString()}
-                      </span>
-                    
-                    </p>
-                      payment:
-                      <span className="text-gray-400">
-                        {item.paymentMethod}
-                      </span>
-                
-                </div>
-              </div>
-            </div>
-
-            <div className=" flex justify-between">
-              <button onClick={loadOrderData} className="border  line  text-sm font-medium  rounded-sm">
-                Track Order
-              </button>
-            </div>
-          </div>
-        ))}
-      </div> */}
+    
     </div>
   );
 };
